@@ -5,98 +5,13 @@
 	<script src='js/jquery-2.1.4.min.js' /></script>
 	<!--5 add lib file-->
 	<script src='js/angular-route.js'/></script>
-	<script type='text/javascript'>
-		//5 inject the ngRoute dependency in the module
-		var myApp = angular.module('myApp', ['ngRoute']);
-		//5 use the config method to set up routing
-		myApp.config(function ($routeProvider) {
-			$routeProvider
-			.when('/',{
-				templateUrl: 'partials/view1.html'
-			})
-			.otherwise({
-				redirectTo: '/'
-			});
-		})//ends config
-
-	    //5b add controller for heros
-	    myApp.controller('customerController', function ($scope, customerFactory) { 
-			//3 create scope for array 
-			$scope.customers = [];
-			//3 get data from factory
-			customerFactory.getCustomers(function (data){
-				$scope.customers = data;
-			})
-
-			//2a ng-click add
-			$scope.addCustomer = function () {				
-				console.log('con addCustomer',$scope.newCustomer );
-
-				//6 use factory method, if new customer name is unique
-				if(!customerFactory.checkCustomer($scope.newCustomer.name)){
-					console.log('2');
-					//$('.error').addClass('hide');					
-					//6 passing object to factory
-					customerFactory.addCustomer($scope.newCustomer);
-				} else {
-					$('.error').removeClass('hide');
-				}
-
-				//clear form values by giving it an empty object
-				$scope.newCustomer = {};
-
-			}
-
-			//5c ng-click delete
-			$scope.removeCustomer = function (customer) {
-				// $scope.heros.splice($index, 1);
-				//  indexOf() calculates the index of the item whose value matches what we pass it.  Look it up!
-    			$scope.customers.splice($scope.customers.indexOf(customer), 1);
-			}
-
-		}); //ends controller
-
-	    //5b add factory to provide data to controller
-		myApp.factory('customerFactory', function () {
-			//3 factory is a function that returns an object literal
-			var customers = [];
-			var factory = {};
-			//3 create getHeros method to a callback 
-			factory.getCustomers = function (callback) {
-				console.log('here in factory');
-				//pass the heros object to callback
-				callback(customers);
-			}
-
-			factory.addCustomer = function(info) {
-				console.log('fac addCustomer', info);
-				customers.push({
-					name: info.name,
-					created: Date.now()
-				})
-			}
-			//6 check array to see if customer name exists
-
-			factory.checkCustomer = function(newCustomerName) {
-				console.log('fac checkCustomer', newCustomerName);
-				for (var i = 0; i < customers.length; i++) {
-					console.log('1');
-					if (customers[i].name == newCustomerName) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			return factory
-		}) //ends factory
-
-	</script>
+	<!--7 move angular code -->
+	<script src='js/script.js'/></script>
 </head>
 <body ng-app='myApp'>
 	<!--5 add navbar for $routeProvider -->
-	<!--5b add link for heros -->
-	<a href="#/partial1">Add a new customer</a>
+	<!--7 add link for customer & orders -->
+	<a href="#/partials2">Customers</a> | <a href="#/">Orders</a>
 	<div ng-view="">
 	</div>
 </body>
